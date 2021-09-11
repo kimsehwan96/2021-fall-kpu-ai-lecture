@@ -6,6 +6,10 @@
 - C++
 - STL(C++)
 
+## Environment
+
+- Intel(x86_64) MacOS & Windows10(Cpp Project with windows API)
+
 ## 목적
 
 - 인공지능의 기본적인 개념부터 최신 이론까지 전반적인 이론을 살펴본다.
