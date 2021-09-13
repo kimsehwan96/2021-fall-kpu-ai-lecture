@@ -4,34 +4,23 @@ date : 2021.09.12
 """
 
 import queue
+from copy import deepcopy
+# 우선 goal 상태(목표)를 정하고 진행하기 위해서, 8-QUEEN 이라고 가정하고 시작한다.
 
 class State:
-    def __init__(self, board_size: int, board: list, goal: list, col: int = 0) -> None:
-        self.board_size = board_size  # if 4 -> 4x4 = array of int 16
+    def __init__(self, board: list, goal: list, col: int = 0) -> None:
         self.board = board
         self.col = col
         self.goal = goal
 
-    def get_new_state(self, row: int, col: int = 0):
-        # row / col 에 해당하는 좌표에 체스말을 두었을 때, 현재 퀸의 위치와 다음 퀸을 둘 수 있고 없고의 상태를 표현
-        new_board = self.board[:]  # 리스트 복사
-        queen_pos = row * self.board_size + col
-        new_board[queen_pos] = 2 #퀸을 두었음
-        # 이후 나머지 보드에서 퀸을 둘 수 없는 칸을 처리하기
+    def get_new_state(self, board, row, col: int = 0):
+        new_board = deepcopy(self.board) #list copy
+        # ...
+        return State(new_board, self.goal, col)
 
-        #위,아래쪽 처리
-        for i in range(self.board_size):
-            calc = col + self.board_size * i
-            if calc != queen_pos:
-                new_board[calc] = 0
-        #좌, 우 처리
-        for i in range(self.board_size):
-            calc = i + row * self.board_size
-            if calc != queen_pos:
-                new_board[calc] = 0
-        #대각선 처리
-        return new_board
-
+    def expand(self, col: int) -> list:
+        result = []
+        pass
 
     def print_board(self) -> None:
         ret = ""
@@ -48,12 +37,30 @@ class State:
                self.print_board() + "\n" + \
                "----------------"
 
+init = [
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    ]
+# 초기 상태 8x8 chess board / 1은 퀸을 둘 수 있는 위치라고 표현함.
+# 0은 퀸을 둘 수 없는 위치, 2는 퀸을 둔 위치
+
+goal = [
+    0, 0, 0, 2, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 2, 0,
+    0, 0, 2, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 2,
+    0, 2, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 2, 0, 0, 0,
+    2, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 2, 0, 0
+        ]
+# 목표 상태
 
 if __name__ == '__main__':
-    print('input N :')
-    N = int(input())
-    init_board = [1 for x in range(N * N)]
-    s = State(N, init_board, [], 0)
-    n = State(N, s.get_new_state(3, 0), [])
-    t = State(N, n.get_new_state(1, 1), [])
-    print(t)
+    pass
