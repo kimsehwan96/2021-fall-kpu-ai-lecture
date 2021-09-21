@@ -24,7 +24,7 @@ class State:
                 new_board[tmp] = 2
             else:
                 new_board[tmp] = 0
-            # 퀸을 두었을 때, 해당 열에 퀸을 놓을 수 없는 위치로 표현
+        # 퀸을 두었을 때, 해당 열에 퀸을 놓을 수 없는 위치로 표현
         for i in range(self.board_size):
             line = (i * self.board_size) + col
             # if i >= col:
@@ -32,19 +32,18 @@ class State:
                 new_board[line] = 2
             else:
                 new_board[line] = 0
-        
-        # 대각선 퀸을 놓을 수 없는 위치로 처리
-        for i in range(col - 1, self.board_size):
+        # 퀸을 두었을 때, 대각선 방향을 퀸을 놓을 수 없는 위치로 표현
+        #대각선 위 방향
+        cnt = 0
+        limit = self.board_size - 1 - col
+        for i in range(row):
+            if cnt < limit:
+                calc = pos - (self.board_size * (i+1)) + (i+1)
+                new_board[calc] = 0
+                cnt += 1
+        #대각선 아래 방향
+        for i in range(col -1, self.board_size):
             line = row * self.board_size + col
-            calc = (line + i) - (self.board_size * i)
-            if calc >= 0:
-                if self.board[calc] == 2:
-                    continue
-                if col >= 1:
-                    if calc > self.board_size:
-                        new_board[calc] = 0
-                else:
-                    new_board[calc] = 0
             calc = (line + i) + (self.board_size * i)
             if (self.board_size * self.board_size) > calc:
                 if self.board[calc] == 2:
@@ -91,7 +90,7 @@ class State:
         # return sum([1 if self.board[i] == 0 else 0 for i in range(self.board_size * self.board_size)])  # board size
         ret = 0
         if self.col < self.board_size:
-            for i in range(self.col, self.board_size):
+            for i in range(self.col + 1, self.board_size):
                 for i2 in range(self.board_size):
                     if self.board[i2 * self.board_size + i] == 0:
                         ret += 1
@@ -126,7 +125,7 @@ def check_is_goal(size: int, l: list) -> bool:
 
 if __name__ == '__main__':
     N = int(input('input board size N : '))
-    init_table = [1 for x in range(N * N)]
+    init_table = [1 for _ in range(N * N)]
     open_queue = queue.PriorityQueue()
     open_queue.put(State(N, init_table))
     closed_queue = []
@@ -147,14 +146,3 @@ if __name__ == '__main__':
         else:
             print('탐색 실패')
         col = current.col + 1
-        sleep(1)
-    # s = State(8, [1 for _ in range(8 * 8)])
-    # t = s.get_new_state(5, 0)
-    # t = t.get_new_state(3, 1)
-    # t = t.get_new_state(7, 2)
-    # t = t.get_new_state(1, 3)
-    # t = t.get_new_state(4, 4)
-    # t = t.get_new_state(2, 5)
-    # t = t.get_new_state(0, 6)
-    # t = t.get_new_state(6, 7)
-    # print(t)
