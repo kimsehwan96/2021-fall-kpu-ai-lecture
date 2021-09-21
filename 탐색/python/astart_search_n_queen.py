@@ -4,6 +4,7 @@ date : 2021.09.12
 """
 
 import queue
+from time import sleep
 
 
 class State:
@@ -31,16 +32,23 @@ class State:
                 new_board[line] = 2
             else:
                 new_board[line] = 0
-            # 대각선 퀸을 놓을 수 없는 위치로 처리
-        for i in range(col, self.board_size):
-            # if col == self.board_size:
-            #     break
+        
+        # 대각선 퀸을 놓을 수 없는 위치로 처리
+        for i in range(col - 1, self.board_size):
             line = row * self.board_size + col
             calc = (line + i) - (self.board_size * i)
-            if calc > 0:
-                new_board[calc] = 0
+            if calc >= 0:
+                if self.board[calc] == 2:
+                    continue
+                if col >= 1:
+                    if calc > self.board_size:
+                        new_board[calc] = 0
+                else:
+                    new_board[calc] = 0
             calc = (line + i) + (self.board_size * i)
             if (self.board_size * self.board_size) > calc:
+                if self.board[calc] == 2:
+                    continue
                 new_board[calc] = 0
         new_board[pos] = 2
 
@@ -60,6 +68,7 @@ class State:
                 if calc >= self.board_size * self.board_size:
                     return []
                 if self.board[calc] == 1:
+                    # 둘 수 있는 경우에만 둔다.
                     result.append(self.get_new_state(i, col))
         return result
 
@@ -138,6 +147,7 @@ if __name__ == '__main__':
         else:
             print('탐색 실패')
         col = current.col + 1
+        sleep(1)
     # s = State(8, [1 for _ in range(8 * 8)])
     # t = s.get_new_state(5, 0)
     # t = t.get_new_state(3, 1)
