@@ -134,10 +134,9 @@ if __name__ == '__main__':
     while not open_queue.empty():
         current = open_queue.get()
         print(current)
-        # if current.board.count(2) == N:
-        # col = current.col + 1
         if check_is_goal(N, current.board):
             print('탐색 성공')
+            print('2015146007 김세환')
             break
         for state in current.expand(col):
             if state not in closed_queue:
